@@ -3,240 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>สื่อการเรียนรู้เรื่อง AI</title>
+<title>แบบสำรวจ: ปัญหาของ AI</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   * { font-family: 'Prompt', sans-serif; }
   body { background: linear-gradient(135deg,#0f172a,#1e1b4b,#312e81); min-height:100vh; }
   .hero-grad { background: linear-gradient(135deg,#6366f1,#a855f7,#f472b6); }
   .card { background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); backdrop-filter: blur(6px); }
-  .menu-btn.active { background: linear-gradient(135deg,#6366f1,#a855f7); color:#fff; }
   .fade-in { animation: fadeIn .4s ease; }
   @keyframes fadeIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
   ::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-thumb{background:#a855f7; border-radius:4px;}
+  textarea::placeholder, input::placeholder { color: rgba(255,255,255,0.4); }
 </style>
 </head>
 <body class="text-white">
 
-<!-- ============ LOGIN SCREEN ============ -->
-<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
-  <div class="card rounded-2xl p-8 w-full max-w-md fade-in">
-    <div class="text-center mb-6">
-      <span class="text-5xl">🤖</span>
-      <h1 class="text-2xl font-semibold mt-2">เข้าสู่บทเรียนเรื่อง AI</h1>
-      <p class="text-white/60 text-sm mt-1">กรอกข้อมูลก่อนเริ่มกิจกรรม</p>
-    </div>
-    <div class="space-y-3">
-      <input id="firstName" type="text" placeholder="ชื่อ" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400 placeholder-white/40">
-      <input id="lastName" type="text" placeholder="นามสกุล" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400 placeholder-white/40">
-      <div class="grid grid-cols-2 gap-3">
-        <input id="studentNo" type="text" placeholder="เลขที่" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400 placeholder-white/40">
-        <input id="classRoom" type="text" placeholder="ชั้น" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400 placeholder-white/40">
-      </div>
-      <button onclick="startLesson()" class="w-full hero-grad py-2.5 rounded-lg font-medium mt-2 hover:opacity-90 transition flex items-center justify-center gap-2">
-        <span class="material-icons text-lg">login</span> เริ่มเรียน
-      </button>
-    </div>
-  </div>
-</div>
+<div class="max-w-2xl mx-auto px-4 py-8">
 
-<!-- ============ MAIN APP ============ -->
-<div id="mainApp" class="hidden">
-  <header class="hero-grad py-8 px-4 text-center shadow-lg">
-    <span class="text-4xl">🧠</span>
-    <h1 class="text-3xl font-semibold mt-2">รู้จัก AI ปัญญาประดิษฐ์</h1>
-    <p class="text-white/80 mt-1">สื่อการเรียนรู้แบบโต้ตอบ</p>
-    <p id="studentTag" class="text-sm text-white/70 mt-2"></p>
+  <header class="hero-grad rounded-2xl py-8 px-6 text-center shadow-lg mb-6 fade-in">
+    <span class="text-4xl">⚠️</span>
+    <h1 class="text-2xl font-semibold mt-2">แบบสำรวจ: ปัญหาของ AI ในปัจจุบัน</h1>
+    <p class="text-white/80 text-sm mt-1">ตอบคำถามและแสดงความคิดเห็นเกี่ยวกับผลกระทบของ AI</p>
   </header>
 
-  <nav class="max-w-4xl mx-auto flex flex-wrap gap-2 justify-center py-4 px-4">
-    <button class="menu-btn active px-4 py-2 rounded-full text-sm bg-white/10 border border-white/20 transition" data-target="sec1" onclick="showSection('sec1',this)">📖 AI คืออะไร</button>
-    <button class="menu-btn px-4 py-2 rounded-full text-sm bg-white/10 border border-white/20 transition" data-target="sec2" onclick="showSection('sec2',this)">🎮 จำลองสถานการณ์</button>
-    <button class="menu-btn px-4 py-2 rounded-full text-sm bg-white/10 border border-white/20 transition" data-target="sec3" onclick="showSection('sec3',this)">📊 ประเภทของ AI</button>
-    <button class="menu-btn px-4 py-2 rounded-full text-sm bg-white/10 border border-white/20 transition" data-target="sec4" onclick="showSection('sec4',this)">✅ แบบทดสอบ</button>
-  </nav>
-
-  <main class="max-w-4xl mx-auto px-4 pb-16">
-
-    <!-- SEC 1: เนื้อหา -->
-    <section id="sec1" class="fade-in">
-      <div class="card rounded-2xl p-6 mb-4">
-        <h2 class="text-xl font-medium mb-2 flex items-center gap-2"><span class="material-icons text-purple-300">psychology</span> AI คืออะไร</h2>
-        <p class="text-white/80 leading-relaxed">ปัญญาประดิษฐ์ (Artificial Intelligence) คือ เทคโนโลยีที่ทำให้คอมพิวเตอร์สามารถ "คิด" และ "ตัดสินใจ" ได้คล้ายมนุษย์ โดยเรียนรู้จากข้อมูลจำนวนมาก แล้วนำมาใช้ทำนาย จำแนก หรือสร้างสิ่งใหม่ ๆ</p>
+  <!-- ข้อมูลผู้ตอบ -->
+  <div class="card rounded-2xl p-6 mb-4 fade-in">
+    <h2 class="text-lg font-medium mb-4 flex items-center gap-2"><span class="material-icons text-purple-300">badge</span> ข้อมูลผู้ตอบแบบสำรวจ</h2>
+    <div class="space-y-3">
+      <input id="firstName" type="text" placeholder="ชื่อ" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400">
+      <input id="lastName" type="text" placeholder="นามสกุล" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400">
+      <div class="grid grid-cols-2 gap-3">
+        <input id="classRoom" type="text" placeholder="ชั้น" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400">
+        <input id="studentNo" type="text" placeholder="เลขที่" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400">
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="card rounded-xl p-4 text-center">
-          <span class="text-3xl">🗣️</span>
-          <h3 class="font-medium mt-2">การประมวลผลภาษา</h3>
-          <p class="text-xs text-white/60 mt-1">เข้าใจและตอบคำถามภาษามนุษย์</p>
-        </div>
-        <div class="card rounded-xl p-4 text-center">
-          <span class="text-3xl">👁️</span>
-          <h3 class="font-medium mt-2">การมองเห็นภาพ</h3>
-          <p class="text-xs text-white/60 mt-1">จดจำวัตถุและใบหน้าในรูปภาพ</p>
-        </div>
-        <div class="card rounded-xl p-4 text-center">
-          <span class="text-3xl">🎯</span>
-          <h3 class="font-medium mt-2">การทำนายผล</h3>
-          <p class="text-xs text-white/60 mt-1">วิเคราะห์แนวโน้มจากข้อมูล</p>
-        </div>
-      </div>
-    </section>
+    </div>
+  </div>
 
-    <!-- SEC 2: Simulation -->
-    <section id="sec2" class="hidden fade-in">
-      <div class="card rounded-2xl p-6">
-        <h2 class="text-xl font-medium mb-2 flex items-center gap-2"><span class="material-icons text-pink-300">smart_toy</span> สถานการณ์จำลอง: ผู้ช่วย AI คัดกรองอีเมล</h2>
-        <p class="text-white/70 text-sm mb-4">เลือกว่าอีเมลต่อไปนี้เป็น "สแปม" หรือ "ปกติ" แล้วดูว่า AI ตัดสินใจถูกหรือไม่</p>
-        <div id="simBox" class="bg-white/10 rounded-xl p-4 mb-4">
-          <p id="simEmail" class="text-white/90"></p>
-        </div>
-        <div class="flex gap-3 justify-center">
-          <button onclick="checkSim('ปกติ')" class="px-5 py-2 rounded-lg bg-green-500/80 hover:bg-green-500 transition">✅ ปกติ</button>
-          <button onclick="checkSim('สแปม')" class="px-5 py-2 rounded-lg bg-red-500/80 hover:bg-red-500 transition">🚫 สแปม</button>
-        </div>
-        <p class="text-center text-white/50 text-xs mt-3">คะแนนจำลอง: <span id="simScore">0</span>/<span id="simTotal">0</span></p>
-      </div>
-    </section>
+  <!-- คำถามปัญหา AI -->
+  <div class="card rounded-2xl p-6 mb-4 fade-in">
+    <h2 class="text-lg font-medium mb-4 flex items-center gap-2"><span class="material-icons text-pink-300">quiz</span> คำถามเกี่ยวกับปัญหาของ AI</h2>
+    <div id="quizArea"></div>
+  </div>
 
-    <!-- SEC 3: กราฟ -->
-    <section id="sec3" class="hidden fade-in">
-      <div class="card rounded-2xl p-6">
-        <h2 class="text-xl font-medium mb-4 flex items-center gap-2"><span class="material-icons text-indigo-300">bar_chart</span> สัดส่วนการใช้งาน AI ในชีวิตประจำวัน</h2>
-        <canvas id="aiChart" height="180"></canvas>
-      </div>
-    </section>
+  <!-- ความคิดเห็น -->
+  <div class="card rounded-2xl p-6 mb-6 fade-in">
+    <h2 class="text-lg font-medium mb-3 flex items-center gap-2"><span class="material-icons text-amber-300">chat_bubble</span> ความคิดเห็นเพิ่มเติม</h2>
+    <p class="text-white/70 text-sm mb-3">คุณคิดว่าปัญหาที่ร้ายแรงที่สุดของ AI ในปัจจุบันคืออะไร เพราะเหตุใด</p>
+    <textarea id="opinion" rows="4" placeholder="พิมพ์ความคิดเห็นของคุณที่นี่..." class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-purple-400 resize-none"></textarea>
+  </div>
 
-    <!-- SEC 4: Quiz -->
-    <section id="sec4" class="hidden fade-in">
-      <div class="card rounded-2xl p-6">
-        <h2 class="text-xl font-medium mb-4 flex items-center gap-2"><span class="material-icons text-amber-300">quiz</span> แบบทดสอบท้ายบท</h2>
-        <div id="quizArea"></div>
-        <div class="text-center mt-4">
-          <button onclick="submitQuiz()" class="hero-grad px-6 py-2.5 rounded-lg font-medium hover:opacity-90 transition">ส่งคำตอบและบันทึกคะแนน</button>
-        </div>
-      </div>
-    </section>
+  <button onclick="submitSurvey()" class="w-full hero-grad py-3 rounded-lg font-medium hover:opacity-90 transition flex items-center justify-center gap-2 mb-10">
+    <span class="material-icons text-lg">send</span> ส่งแบบสำรวจ
+  </button>
 
-  </main>
-
-  <footer class="text-center text-white/40 text-xs py-6 border-t border-white/10">
+  <footer class="text-center text-white/40 text-xs pb-6 border-t border-white/10 pt-6">
     © 2025 อบรม Ai กับทีมวิทยากร คณะศึกษาศาสตร์ มข.
   </footer>
+
 </div>
 
 <script>
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfYpuAB-ETb9FXe4hIMUqlrz1YC6QntIhe7Vujhxq7SxcFSJzzLNJ3BhnXHMGt_zFh/exec";
-let student = {};
 
-function sendToSheet(activity, score, maxScore) {
-  return new Promise((resolve) => {
-    const cbName = "cb_" + Date.now();
-    window[cbName] = function(res) {
-      resolve(res);
-      delete window[cbName];
-      document.body.removeChild(script);
-    };
-    const params = new URLSearchParams({
-      action: "save",
-      firstName: student.firstName,
-      lastName: student.lastName,
-      studentNo: student.studentNo,
-      classRoom: student.classRoom,
-      activity, score, maxScore,
-      callback: cbName
-    });
-    const script = document.createElement("script");
-    script.src = APPS_SCRIPT_URL + "?" + params.toString();
-    script.onerror = () => { resolve({status:"error", message:"เชื่อมต่อไม่สำเร็จ"}); };
-    document.body.appendChild(script);
-  });
-}
-
-function startLesson() {
-  const firstName = document.getElementById('firstName').value.trim();
-  const lastName = document.getElementById('lastName').value.trim();
-  const studentNo = document.getElementById('studentNo').value.trim();
-  const classRoom = document.getElementById('classRoom').value.trim();
-  if (!firstName || !lastName || !studentNo || !classRoom) {
-    Swal.fire({icon:'warning', title:'กรอกข้อมูลไม่ครบ', text:'กรุณากรอกข้อมูลให้ครบทุกช่อง', background:'#1e1b4b', color:'#fff'});
-    return;
-  }
-  student = {firstName, lastName, studentNo, classRoom};
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('mainApp').classList.remove('hidden');
-  document.getElementById('studentTag').textContent = `👤 ${firstName} ${lastName} | เลขที่ ${studentNo} | ชั้น ${classRoom}`;
-  initChart();
-  initQuiz();
-}
-
-function showSection(id, btn) {
-  document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-// ---- Simulation ----
-const simItems = [
-  {text:"🎉 คุณถูกรางวัลรถยนต์ คลิกลิงก์ด่วน!", answer:"สแปม"},
-  {text:"สวัสดีค่ะ พรุ่งนี้มีประชุมกลุ่มเวลา 13.00 น.", answer:"ปกติ"},
-  {text:"ยินดีด้วย! รับเงินฟรี 50,000 บาท กดที่นี่ทันที", answer:"สแปม"},
-  {text:"อาจารย์ส่งไฟล์การบ้านมาให้ทางอีเมลแล้วครับ", answer:"ปกติ"}
-];
-let simIndex = 0, simScore = 0;
-function loadSim() {
-  if (simIndex >= simItems.length) {
-    document.getElementById('simEmail').textContent = "🎉 จบสถานการณ์จำลองแล้ว!";
-    sendToSheet("simulation_email", simScore, simItems.length);
-    return;
-  }
-  document.getElementById('simEmail').textContent = simItems[simIndex].text;
-  document.getElementById('simTotal').textContent = simItems.length;
-}
-function checkSim(choice) {
-  const correct = simItems[simIndex].answer === choice;
-  if (correct) simScore++;
-  document.getElementById('simScore').textContent = simScore;
-  Swal.fire({
-    icon: correct ? 'success' : 'error',
-    title: correct ? 'ถูกต้อง!' : 'ยังไม่ถูก',
-    text: `คำตอบที่ถูกคือ "${simItems[simIndex].answer}"`,
-    background:'#1e1b4b', color:'#fff', timer:1600, showConfirmButton:false
-  });
-  simIndex++;
-  setTimeout(loadSim, 1700);
-}
-loadSim();
-
-// ---- Chart ----
-function initChart() {
-  const ctx = document.getElementById('aiChart');
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['ผู้ช่วยเสียง','แนะนำสินค้า','แปลภาษา','รถยนต์อัตโนมัติ','อื่นๆ'],
-      datasets: [{ data: [30,25,20,15,10], backgroundColor: ['#6366f1','#a855f7','#f472b6','#38bdf8','#94a3b8'] }]
-    },
-    options: { plugins: { legend: { labels: { color: '#fff' } } } }
-  });
-}
-
-// ---- Quiz ----
 const quizData = [
-  {q:"AI ย่อมาจากอะไร?", options:["Artificial Intelligence","Auto Internet","Applied Information"], answer:0},
-  {q:"ข้อใดคือตัวอย่างการใช้ AI ในชีวิตประจำวัน?", options:["เครื่องคิดเลข","ผู้ช่วยเสียง Siri/Google","นาฬิกาแบบเข็ม"], answer:1},
-  {q:"AI เรียนรู้จากสิ่งใดเป็นหลัก?", options:["ข้อมูล (Data)","สี","เสียงเพลง"], answer:0}
+  {q:"ข้อใดคือปัญหาด้าน \"ความลำเอียง\" (Bias) ของ AI?", options:["AI ตัดสินใจโดยอิงข้อมูลที่มีอคติแฝงอยู่ ทำให้ผลลัพธ์ไม่เป็นธรรม","AI ทำงานช้ากว่ามนุษย์","AI ใช้ไฟฟ้ามากเกินไป"], answer:0},
+  {q:"Deepfake คือปัญหาด้านใดของ AI?", options:["การประหยัดพลังงาน","การปลอมแปลงภาพ/เสียง/วิดีโอจนแยกไม่ออกจากของจริง","ความเร็วในการประมวลผล"], answer:1},
+  {q:"ข้อกังวลเรื่อง \"การแทนที่แรงงาน\" หมายถึงอะไร?", options:["AI อาจทำให้บางอาชีพลดความต้องการแรงงานมนุษย์ลง","AI ทำให้คนมีงานทำมากขึ้นทุกสาขา","AI ไม่เกี่ยวกับตลาดแรงงาน"], answer:0},
+  {q:"ปัญหาด้าน \"ความเป็นส่วนตัว\" (Privacy) ของ AI คือข้อใด?", options:["AI อาจเก็บและใช้ข้อมูลส่วนบุคคลโดยเจ้าของข้อมูลไม่ยินยอม","AI ช่วยปกป้องข้อมูลได้ 100%","AI ไม่เก็บข้อมูลใดๆ เลย"], answer:0},
+  {q:"เหตุใดข้อมูลเท็จ (Misinformation) จาก AI จึงเป็นปัญหาสำคัญ?", options:["เพราะ AI สร้างเนื้อหาที่ดูน่าเชื่อถือได้ง่าย ทำให้คนหลงเชื่อข้อมูลผิดๆ","เพราะ AI สร้างข้อมูลได้ช้ามาก","เพราะ AI ไม่สามารถสร้างข้อความได้"], answer:0}
 ];
+
 function initQuiz() {
   const area = document.getElementById('quizArea');
   area.innerHTML = quizData.map((item,i) => `
     <div class="mb-4 bg-white/5 rounded-xl p-4">
-      <p class="font-medium mb-2">${i+1}. ${item.q}</p>
+      <p class="font-medium mb-2 text-sm">${i+1}. ${item.q}</p>
       ${item.options.map((op,j) => `
         <label class="flex items-center gap-2 mb-1 cursor-pointer">
           <input type="radio" name="q${i}" value="${j}" class="accent-purple-400">
@@ -244,18 +88,67 @@ function initQuiz() {
         </label>`).join('')}
     </div>`).join('');
 }
-async function submitQuiz() {
+initQuiz();
+
+function sendToSheet(payload) {
+  return new Promise((resolve) => {
+    const cbName = "cb_" + Date.now();
+    window[cbName] = function(res) {
+      resolve(res);
+      delete window[cbName];
+      document.body.removeChild(script);
+    };
+    const params = new URLSearchParams(Object.assign({ action: "save", callback: cbName }, payload));
+    const script = document.createElement("script");
+    script.src = APPS_SCRIPT_URL + "?" + params.toString();
+    script.onerror = () => { resolve({status:"error", message:"เชื่อมต่อไม่สำเร็จ"}); };
+    document.body.appendChild(script);
+  });
+}
+
+async function submitSurvey() {
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const classRoom = document.getElementById('classRoom').value.trim();
+  const studentNo = document.getElementById('studentNo').value.trim();
+  const opinion = document.getElementById('opinion').value.trim();
+
+  if (!firstName || !lastName || !classRoom || !studentNo) {
+    Swal.fire({icon:'warning', title:'กรอกข้อมูลไม่ครบ', text:'กรุณากรอกชื่อ นามสกุล ชั้น เลขที่ให้ครบ', background:'#1e1b4b', color:'#fff'});
+    return;
+  }
+
+  let unanswered = false;
   let score = 0;
   quizData.forEach((item,i) => {
     const selected = document.querySelector(`input[name="q${i}"]:checked`);
-    if (selected && parseInt(selected.value) === item.answer) score++;
+    if (!selected) unanswered = true;
+    else if (parseInt(selected.value) === item.answer) score++;
   });
-  Swal.fire({title:'กำลังบันทึกคะแนน...', allowOutsideClick:false, background:'#1e1b4b', color:'#fff', didOpen:() => Swal.showLoading()});
-  const res = await sendToSheet("quiz_ai", score, quizData.length);
+
+  if (unanswered) {
+    Swal.fire({icon:'warning', title:'ตอบคำถามไม่ครบ', text:'กรุณาตอบคำถามทุกข้อก่อนส่ง', background:'#1e1b4b', color:'#fff'});
+    return;
+  }
+
+  if (!opinion) {
+    Swal.fire({icon:'warning', title:'ยังไม่ได้แสดงความคิดเห็น', text:'กรุณากรอกความคิดเห็นก่อนส่ง', background:'#1e1b4b', color:'#fff'});
+    return;
+  }
+
+  Swal.fire({title:'กำลังส่งข้อมูล...', allowOutsideClick:false, background:'#1e1b4b', color:'#fff', didOpen:() => Swal.showLoading()});
+
+  const res = await sendToSheet({
+    firstName, lastName, studentNo, classRoom,
+    activity: "survey_ai_problems",
+    score, maxScore: quizData.length,
+    opinion
+  });
+
   Swal.fire({
     icon: res && res.status === 'success' ? 'success' : 'error',
-    title: `คะแนนของคุณ ${score}/${quizData.length}`,
-    text: res && res.status === 'success' ? 'บันทึกคะแนนลง Google Sheets เรียบร้อยแล้ว' : 'บันทึกคะแนนไม่สำเร็จ กรุณาลองใหม่',
+    title: res && res.status === 'success' ? 'ส่งแบบสำรวจสำเร็จ' : 'ส่งไม่สำเร็จ',
+    text: res && res.status === 'success' ? `บันทึกข้อมูลเรียบร้อยแล้ว (ตอบถูก ${score}/${quizData.length} ข้อ)` : 'กรุณาลองใหม่อีกครั้ง',
     background:'#1e1b4b', color:'#fff'
   });
 }
